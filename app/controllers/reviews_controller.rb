@@ -8,16 +8,19 @@ class ReviewsController < ApplicationController
 
   # POST /restaurants/:restaurant_id/reviews
   def create
-    review = Review.new(review_params)
-    review.restaurant = @restaurant
-    review.save
-    redirect_to restaurant_path(@restaurant)
+    @review = Review.new(review_params)
+    @review.restaurant = @restaurant
+    if @review.save
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :new
+    end
   end
 
   private
 
   def review_params
-    params.require(:review).permit(:content)
+    params.require(:review).permit(:content, :rating)
   end
 
   def set_restaurant
